@@ -4,7 +4,6 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        //1. Load images
         this.load.image('yellow', '../../assets/sprites/yellow-dot.svg');
         this.load.image('green', '../../assets/sprites/green-dot.svg');
         this.load.image('red', '../../assets/sprites/red-dot.svg');
@@ -12,16 +11,18 @@ class GameScene extends Phaser.Scene {
         this.load.image('blue', '../../assets/sprites/blue-dot.svg');
     }
 
-    create() {
-        // 2. Display images    
+    create() { 
+        this.createDots(); 
+    }
+
+    createDots() {
+        this.dots = [];
         let positions = this.getDotsPositions();
 
-        let rnd = Phaser.Math.RND;
-        let dotsImages = ['yellow', 'green', 'red', 'purple', 'blue'];
-
         for(let position of positions) {
-            this.add.sprite(position.x, position.y, rnd.pick(dotsImages)).setOrigin(0, 0);
+            this.dots.push(new Dots(this, position));
         }
+
     }
 
     getDotsPositions() {

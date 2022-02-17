@@ -4,6 +4,7 @@ let config = {
     height: 720,
     rows: 6, 
     cols: 6,
+    dots: ['yellow', 'green', 'red', 'purple', 'blue'],
     scene: new GameScene(),
     backgroundColor: "#eee"
 };
