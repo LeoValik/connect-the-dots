@@ -15,6 +15,10 @@ class GameScene extends Phaser.Scene {
         this.createDots(); 
     }
 
+    update() {
+
+    }
+
     createDots() {
         this.dots = [];
         let positions = this.getDotsPositions();
@@ -23,6 +27,12 @@ class GameScene extends Phaser.Scene {
             this.dots.push(new Dots(this, position));
         }
 
+        this.input.on('gameobjectdown', this.onDotClicked, this);
+    }
+
+    onDotClicked(pointer, dots) {
+        dots.open();
+        this.drawLine(dots);
     }
 
     getDotsPositions() {
@@ -43,5 +53,42 @@ class GameScene extends Phaser.Scene {
         }
     
         return positions;
+    }
+
+    drawLine(dots) {
+        let graphics = this.add.graphics();
+        let color = dots.getColor();
+        console.log(color);
+        let thickness = 10;
+        let alpha = 1;
+        //  Events
+        let sx = 0;
+        let sy = 0;
+        let draw = false;
+
+        this.input.mouse.disableContextMenu();
+
+        this.input.on('pointerdown', function (pointer) {
+            sx = pointer.x;
+            sy = pointer.y;
+            draw = true;
+            // if (pointer.leftButtonDown() || pointer.rightButtonDown())
+            // {
+            //     color = '0x00ffff';
+            // }
+        });
+
+        this.input.on('pointerup', function () {
+            draw = false;
+        });
+    
+        this.input.on('pointermove', function (pointer) {
+            if (draw && pointer.noButtonDown() === false)
+            {
+                graphics.clear();
+                graphics.lineStyle(thickness, color, alpha);
+                graphics.lineBetween(sx, sy, pointer.x, pointer.y);
+            }
+        });
     }
 }

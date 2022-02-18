@@ -5,6 +5,7 @@ let config = {
     rows: 6, 
     cols: 6,
     dots: ['yellow', 'green', 'red', 'purple', 'blue'],
+    disableContextMenu: true,
     scene: new GameScene(),
     backgroundColor: "#eee"
 };
