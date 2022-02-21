@@ -14,6 +14,9 @@ let config = {
     */
     colors: ['0xD11E1E', '0xF6CF43', '0x55DB25', '0x8E19AB', '0x23FFF2'],
     score: 0,
+    scoreList: [],
+    idCount: 0,
+    selected: null,
     disableContextMenu: true,
     scene: new GameScene(),
     backgroundColor: "#eee"
