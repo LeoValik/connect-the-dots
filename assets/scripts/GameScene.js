@@ -4,45 +4,48 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('yellow', '../../assets/sprites/yellow-dot.svg');
-        this.load.image('green', '../../assets/sprites/green-dot.svg');
-        this.load.image('red', '../../assets/sprites/red-dot.svg');
-        this.load.image('purple', '../../assets/sprites/purple-dot.svg');
-        this.load.image('blue', '../../assets/sprites/blue-dot.svg');
+
     }
 
     create() { 
-        this.createDots(); 
+        this.createBoardOfDots(); 
     }
 
     update() {
 
     }
 
-    createDots() {
-        this.dots = [];
+    createBoardOfDots() {
+        this.boardOfDots = [];
         let positions = this.getDotsPositions();
 
+        let rnd = Phaser.Math.RND;
+        let alpha = 1;
+        let radius = 20;
+        let graphics = this.add.graphics();
+
         for(let position of positions) {
-            this.dots.push(new Dots(this, position));
+            let color = rnd.pick(config.colors);
+            graphics.fillStyle(color, alpha);
+            graphics.fillCircle(position.x, position.y, radius);
+            //console.log(`x = ${position.x}, y = ${position.y}`);
+            this.boardOfDots.push(new Dots(this, position, color));
         }
 
-        this.input.on('gameobjectdown', this.onDotClicked, this);
-    }
+        //this.input.on('gameobjectdown', this.positionsOfDots(this.boardOfDots), this);
 
-    onDotClicked(pointer, dots) {
-        dots.open();
-        this.drawLine(dots);
+        console.log(this.boardOfDots);
+
     }
 
     getDotsPositions() {
         let positions = [];
-        let dotTexture = this.textures.get("yellow").getSourceImage();
-        let dotWidth = dotTexture.width + 25;
-        let dotHeight = dotTexture.height + 25;
+        let sizeOfDots = 50;
+        let dotWidth = sizeOfDots + 25;
+        let dotHeight = sizeOfDots + 25;
         let offsetX = (this.sys.game.config.width - dotWidth * config.cols) / 2;
         let offsetY = (this.sys.game.config.height - dotHeight * config.rows) / 2;
-    
+
         for (let row = 0; row < config.rows; row++) {
             for(let col = 0; col < config.cols; col++) {
                 positions.push({
@@ -51,44 +54,17 @@ class GameScene extends Phaser.Scene {
                 });
             }
         }
-    
+
         return positions;
     }
 
-    drawLine(dots) {
-        let graphics = this.add.graphics();
-        let color = dots.getColor();
-        console.log(color);
-        let thickness = 10;
-        let alpha = 1;
-        //  Events
-        let sx = 0;
-        let sy = 0;
-        let draw = false;
-
-        this.input.mouse.disableContextMenu();
-
-        this.input.on('pointerdown', function (pointer) {
-            sx = pointer.x;
-            sy = pointer.y;
-            draw = true;
-            // if (pointer.leftButtonDown() || pointer.rightButtonDown())
-            // {
-            //     color = '0x00ffff';
-            // }
-        });
-
-        this.input.on('pointerup', function () {
-            draw = false;
-        });
-    
-        this.input.on('pointermove', function (pointer) {
-            if (draw && pointer.noButtonDown() === false)
-            {
-                graphics.clear();
-                graphics.lineStyle(thickness, color, alpha);
-                graphics.lineBetween(sx, sy, pointer.x, pointer.y);
+    positionsOfDots(dots) {
+        for (let row = 0; row < config.rows; row++) {
+            let col = this.dots[row].indexOf(dots[col]);
+            if (col > -1) {
+                return {row: row, col: col};
             }
-        });
+        }
+        return {};
     }
 }
