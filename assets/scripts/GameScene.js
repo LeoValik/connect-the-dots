@@ -9,6 +9,14 @@ class GameScene extends Phaser.Scene {
 
     create() { 
         this.createBoardOfDots(); 
+        this.createText();
+    }
+
+    createText() {
+        this.add.text(1100, 20, 'Points: ', {
+            font: '36px Huxtable',
+            fill: '#000000'
+        });
     }
 
     update() {
